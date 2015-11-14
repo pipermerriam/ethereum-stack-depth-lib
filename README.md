@@ -13,15 +13,14 @@ function call, and the targeted function will fail due to exceeding the maximum
 stack depth (1024)
 
 Credit goes to Martin Holst Swende [@mhswende](https://twitter.com/mhswende)
-for teaching me about this attack
-vector.
+for teaching me about this attack vector.
 
 
 ## API
 
 **StackDepthLib.check_depth(address me, uint depth) returns (bool)**
 
-Parameters
+Parameters:
 
 * `self`: This is the address of the deployed `StackDepthLib` library.  This is
   necessary because the depth checking requires recursion and libraries are
