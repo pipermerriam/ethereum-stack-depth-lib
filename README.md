@@ -12,7 +12,8 @@ She can then artificially increase the stack depth prior to entering into the
 function call, and the targeted function will fail due to exceeding the maximum
 stack depth (1024)
 
-Credit goes to REDACTED REDACTED REDACTED for teaching me about this attack
+Credit goes to Martin Holst Swende [@mhswende](https://twitter.com/mhswende)
+for teaching me about this attack
 vector.
 
 
