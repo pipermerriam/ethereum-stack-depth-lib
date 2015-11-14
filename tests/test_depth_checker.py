@@ -1,5 +1,7 @@
 import pytest
 
+import itertools
+
 
 @pytest.mark.parametrize(
     "before_d,check_d",
@@ -24,3 +26,27 @@ def test_depths(deployed_contracts, before_d, check_d):
     tester.set_sdl(deployed_contracts.StackDepthLib._meta.address)
     expected = before_d + check_d < 1024
     assert tester.test_depth(before_d, check_d) is expected
+
+
+def test_gas_usage(deployed_contracts, deploy_client):
+    tester = deployed_contracts.TestDepth
+    tester.set_sdl(deployed_contracts.StackDepthLib._meta.address)
+
+    gas_usage = {}
+
+    values_to_measure = itertools.chain(
+        range(0, 10),
+        range(10, 100, 10),
+        range(100, 1000, 100),
+        [1023],
+    )
+
+    from pprint import pprint
+
+    for depth in values_to_measure:
+        txn_hash = tester.test_depth.sendTransaction(0, depth)
+        txn_receipt = deploy_client.wait_for_transaction(txn_hash)
+        gas_used = int(txn_receipt['gasUsed'], 16)
+        gas_usage[depth] = (gas_used - 21399) / max(depth, 1)
+
+    pprint(sorted(gas_usage.items()))

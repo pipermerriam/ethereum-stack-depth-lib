@@ -23,7 +23,7 @@ vector.
 
 Parameters
 
-* `me`: This is the address of the deployed `StackDepthLib` library.  This is
+* `self`: This is the address of the deployed `StackDepthLib` library.  This is
   necessary because the depth checking requires recursion and libraries are
   unable to determine their own addresses since they operate on other libraries
   storage.
@@ -31,4 +31,6 @@ Parameters
 
 Returns a boolean as to whether the depth increase was successful or not.
 
-This will use approximately 600 gas per stack depth level.
+This will use approximately 390 gas per stack depth level.  The library
+reserves 400 gas per level, so if you want to check for 100 levels, it will
+cost around 40,000 gas.
