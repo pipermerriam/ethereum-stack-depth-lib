@@ -17,4 +17,22 @@ contract TestDepth {
                         return StackDepthLib.check_depth(sdl, d);
                 }
         }
+
+        modifier require_stack_depth(uint16 depth) {
+                if (depth > 1023) throw;
+                if (!StackDepthLib.check_depth(sdl, depth)) throw;
+                _
+        }
+
+        function test_requires_depth(uint16 drill_to) constant returns (bool) {
+                if (drill_to > 0) {
+                        TestDepth me = TestDepth(address(this));
+                        return me.test_requires_depth(drill_to - 1);
+                }
+                return requires_depth();
+        }
+
+        function requires_depth() constant require_stack_depth(1000) returns (bool) {
+                return true;
+        }
 }

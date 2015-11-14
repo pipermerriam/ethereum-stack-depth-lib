@@ -33,3 +33,22 @@ Returns a boolean as to whether the depth increase was successful or not.
 This will use approximately 390 gas per stack depth level.  The library
 reserves 400 gas per level, so if you want to check for 100 levels, it will
 cost around 40,000 gas.
+
+## As a Modifier
+
+This library can be used with Solidity's modifier pattern.
+
+```
+modifier require_stack_depth(uint16 depth) {
+    if (depth > 1023) throw;
+    if (!StackDepthLib.check_depth(sdl, depth)) throw;
+    _
+}
+
+function requires_depth() constant require_stack_depth(1000) {
+    // do something
+}
+```
+
+In this example, the `requires_depth` function will no be callable unless the
+stack depth can be increased by `1000`.

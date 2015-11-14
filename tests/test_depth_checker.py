@@ -2,6 +2,8 @@ import pytest
 
 import itertools
 
+from ethereum.tester import TransactionFailed
+
 
 @pytest.mark.parametrize(
     "before_d,check_d",
@@ -50,3 +52,18 @@ def test_gas_usage(deployed_contracts, deploy_client):
         gas_usage[depth] = (gas_used - 21399) / max(depth, 1)
 
     pprint(sorted(gas_usage.items()))
+
+
+@pytest.mark.parametrize(
+    "pre_depth",
+    (0, 1, 10, 20, 23, 24),
+)
+def test_modifier(deployed_contracts, pre_depth):
+    tester = deployed_contracts.TestDepth
+    tester.set_sdl(deployed_contracts.StackDepthLib._meta.address)
+    expected = pre_depth + 1000 < 1024
+    if expected:
+        assert tester.test_requires_depth(pre_depth) is True
+    else:
+        with pytest.raises(TransactionFailed):
+            tester.test_requires_depth(pre_depth)
